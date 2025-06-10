@@ -3,16 +3,17 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDmDusi2BcT_kI41oyNMlHVJUTyPtXG774",
-  authDomain: "learnlingo-91779.firebaseapp.com",
-  projectId: "learnlingo-91779",
-  storageBucket: "learnlingo-91779.appspot.com",
-  messagingSenderId: "790776929036",
-  appId: "1:790776929036:web:ca871933060c505f3fc729",
-  measurementId: "G-48J8HBESY6",
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+export default app;
