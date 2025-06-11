@@ -1,5 +1,3 @@
-// src/contexts/FavoritesContext.jsx
-
 import React, {
   createContext,
   useContext,
@@ -49,8 +47,7 @@ export const FavoritesProvider = ({ children }) => {
         setFavoriteTeacherIds(new Set());
       }
     } catch (error) {
-      console.error("Error fetching favorites:", error);
-      setFavoritesError("Favoriler yüklenirken bir hata oluştu.");
+      setFavoritesError("Error removing favorite");
     } finally {
       setIsLoadingFavorites(false);
     }
@@ -64,13 +61,10 @@ export const FavoritesProvider = ({ children }) => {
     if (!currentUser || favoriteTeacherIds.has(teacherId)) return;
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
-      // ÖNCE veritabanını güncelle
       await updateDoc(userDocRef, { favorites: arrayUnion(teacherId) });
-      // SONRA arayüzü güncelle
       setFavoriteTeacherIds((prevIds) => new Set(prevIds).add(teacherId));
     } catch (error) {
-      console.error("Error adding favorite:", error);
-      setFavoritesError("Favorilere eklenirken bir hata oluştu.");
+      setFavoritesError("Error removing favorite");
     }
   };
 
@@ -78,17 +72,16 @@ export const FavoritesProvider = ({ children }) => {
     if (!currentUser || !favoriteTeacherIds.has(teacherId)) return;
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
-      // ÖNCE veritabanını güncelle
+
       await updateDoc(userDocRef, { favorites: arrayRemove(teacherId) });
-      // SONRA arayüzü güncelle
+
       setFavoriteTeacherIds((prevIds) => {
         const newIds = new Set(prevIds);
         newIds.delete(teacherId);
         return newIds;
       });
     } catch (error) {
-      console.error("Error removing favorite:", error);
-      setFavoritesError("Favorilerden çıkarılırken bir hata oluştu.");
+      setFavoritesError("Error removing favorite");
     }
   };
 

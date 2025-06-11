@@ -1,5 +1,3 @@
-// src/pages/FavoritesPage.jsx
-
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoritesContext";
@@ -68,12 +66,10 @@ const FavoritesPage = () => {
         My favorite teachers
       </h1>
 
-      {/* --- LİSTELEME MANTIĞI DÜZELTİLDİ --- */}
       {favoriteTeachers.length > 0 ? (
         <TeacherList
-          teachers={favoriteTeachers} // Doğrudan favori öğretmenler listesini kullan
+          teachers={favoriteTeachers}
           favoriteStatus={favoriteTeachers.reduce(
-            // Bu listedeki herkes favori olduğu için hepsine true ata
             (acc, teacher) => ({ ...acc, [teacher.id]: true }),
             {}
           )}

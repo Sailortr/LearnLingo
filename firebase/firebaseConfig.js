@@ -11,6 +11,9 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APP_ID,
 };
 
+console.log("KULLANILAN FIREBASE YAPILANDIRMASI:", firebaseConfig);
+console.log("OKUNAN API ANAHTARI:", import.meta.env.VITE_API_KEY);
+
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);

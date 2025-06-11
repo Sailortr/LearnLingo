@@ -1,9 +1,6 @@
-// src/components/Teachers/TeacherCard.jsx
-
 import React, { useState } from "react";
 import ReviewItem from "./ReviewItem";
 
-// ... İkonlarınız aynı kalabilir ...
 const BookOpenIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +63,6 @@ const TeacherCard = ({
 
   return (
     <div className="bg-white rounded-3xl border border-gray-200/80 p-6 mb-8 transition-shadow duration-300 hover:shadow-lg">
-      {/* --- YERLEŞİM HATASI DÜZELTİLDİ: md:flex-row olmalı --- */}
       <div className="flex flex-row md:flex-col gap-8">
         <div className="flex-shrink-0 flex justify-center md:justify-start">
           <div className="relative w-28 h-28">
@@ -85,7 +81,7 @@ const TeacherCard = ({
             <div className="absolute top-2 right-2 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
           </div>
         </div>
-        {/* ... Geri kalan kod aynı ... */}
+
         <div className="flex-1">
           <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
             <div>
@@ -134,12 +130,10 @@ const TeacherCard = ({
               <span className="text-gray-800">{teacher.lesson_info}</span>
             </p>
             <p className="text-base">
-              <p className="text-base">
-                <span className="font-medium text-gray-500">Conditions:</span>{" "}
-                <span className="text-gray-800">
-                  {teacher.conditions.join(" ")}
-                </span>
-              </p>
+              <span className="font-medium text-gray-500">Conditions:</span>{" "}
+              <span className="text-gray-800">
+                {teacher.conditions.join(" ")}
+              </span>
             </p>
           </div>
           <button

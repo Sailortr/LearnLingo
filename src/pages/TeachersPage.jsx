@@ -5,16 +5,13 @@ import TeacherList from "../components/Teachers/TeacherList";
 import LoadMoreButton from "../components/Teachers/LoadMoreButton";
 import Spinner from "../components/UI/Spinner";
 import BookingModal from "../components/Booking/BookingModal";
-
-// --- YENİ EKLENTİLER ---
 import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoritesContext";
-import InfoModal from "../components/UI/InfoModal"; // Basit uyarı modalımız
+import InfoModal from "../components/UI/InfoModal";
 
 const TEACHERS_PER_PAGE = 4;
 
 const TeachersPage = () => {
-  // Mevcut state'leriniz
   const [allTeachers] = useState(teachersData);
   const [displayedTeachers, setDisplayedTeachers] = useState([]);
   const [filters, setFilters] = useState({
@@ -28,21 +25,17 @@ const TeachersPage = () => {
   const [selectedTeacherForBooking, setSelectedTeacherForBooking] =
     useState(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-
-  // --- YENİ STATE VE CONTEXT'LER ---
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false); // Uyarı modalının durumu
-  const { currentUser } = useAuth(); // Kullanıcının giriş durumu
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const { currentUser } = useAuth();
   const { isFavorite, addFavoriteTeacher, removeFavoriteTeacher } =
-    useFavorites(); // Favori fonksiyonları
+    useFavorites();
 
-  // --- YENİ KOŞULLU FAVORİ FONKSİYONU ---
   const handleToggleFavorite = (teacherId) => {
     if (!currentUser) {
-      // Kullanıcı giriş yapmamışsa, uyarı modalını aç
       setIsInfoModalOpen(true);
       return;
     }
-    // Kullanıcı giriş yapmışsa, favori işlemini yap
+
     if (isFavorite(teacherId)) {
       removeFavoriteTeacher(teacherId);
     } else {
@@ -50,7 +43,6 @@ const TeachersPage = () => {
     }
   };
 
-  // --- DİĞER FONKSİYONLARINIZ (Değişiklik yok) ---
   const handleOpenBookingModal = (teacher) => {
     setSelectedTeacherForBooking(teacher);
     setIsBookingModalOpen(true);
@@ -61,10 +53,7 @@ const TeachersPage = () => {
     setIsBookingModalOpen(false);
   };
 
-  const handleBookingSuccess = () => {
-    // Bu fonksiyon modalın hemen kapanmaması için boş bırakılabilir
-    // veya sayfada bir bildirim gösterebilir.
-  };
+  const handleBookingSuccess = () => {};
 
   const applyFilters = (data, filterSettings) => {
     return data.filter((teacher) => {
@@ -137,7 +126,6 @@ const TeachersPage = () => {
           <Spinner size="lg" />
         </div>
       ) : (
-        // --- `TeacherList`'e YENİ PROPLAR EKLENDİ ---
         <TeacherList
           teachers={displayedTeachers}
           onBookLesson={handleOpenBookingModal}
@@ -169,7 +157,6 @@ const TeachersPage = () => {
         />
       )}
 
-      {/* --- UYARI MODALI JSX'E EKLENDİ --- */}
       <InfoModal
         isOpen={isInfoModalOpen}
         onClose={() => setIsInfoModalOpen(false)}
