@@ -28,7 +28,7 @@ const FavoritesPage = () => {
         const teachers = await getTeachersByIds(ids);
         setFavoriteTeachers(teachers);
       } catch (error) {
-        console.error("Favori öğretmen detayları getirilemedi:", error);
+        console.error("Failed to fetch favorite teacher details:", error);
         setFavoriteTeachers([]);
       } finally {
         setIsLoadingDetails(false);
