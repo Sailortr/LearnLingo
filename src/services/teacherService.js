@@ -135,20 +135,27 @@ export const getTeachersByIds = async (idArray) => {
   }
 };
 
-/**
- * teachers.json dosyasındaki verileri Firestore'a toplu olarak yükler.
- */
+// src/services/teacherService.js
+
+// ... diğer importlar ve fonksiyonlar aynı kalacak ...
+
 export const uploadTeachersFromJson = async (teachersArray) => {
   if (!teachersArray || teachersArray.length === 0) {
     console.warn("TeacherService: No teachers to upload.");
     return;
   }
+
   const batch = writeBatch(db);
   const teachersRef = collection(db, TEACHERS_COLLECTION);
+
   teachersArray.forEach((teacher) => {
-    const docRef = doc(teachersRef);
+    // --- DEĞİŞİKLİK BURADA ---
+    // Firestore'un otomatik ID oluşturması yerine, JSON dosyasındaki teacher.id'yi kullanıyoruz.
+    const docRef = doc(db, TEACHERS_COLLECTION, teacher.id);
+
     batch.set(docRef, teacher);
   });
+
   try {
     await batch.commit();
     console.log(

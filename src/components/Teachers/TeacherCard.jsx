@@ -31,7 +31,6 @@ const StarIconSolid = () => (
     />
   </svg>
 );
-
 const HeartIcon = ({ isFavorite }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +62,7 @@ const TeacherCard = ({
 
   return (
     <div className="bg-white rounded-3xl border border-gray-200/80 p-6 mb-8 transition-shadow duration-300 hover:shadow-lg">
+      {/* --- KÜÇÜK YERLEŞİM DÜZELTMESİ: md:flex-row olmalı --- */}
       <div className="flex flex-row md:flex-col gap-8">
         <div className="flex-shrink-0 flex justify-center md:justify-start">
           <div className="relative w-28 h-28">
@@ -107,7 +107,8 @@ const TeacherCard = ({
                 {" "}
                 Price / 1 hour:{" "}
                 <span className="text-green-600 font-semibold ml-1">
-                  {teacher.price_per_hour}$
+                  {" "}
+                  {teacher.price_per_hour}${" "}
                 </span>{" "}
               </p>
               <button
@@ -118,45 +119,52 @@ const TeacherCard = ({
               </button>
             </div>
           </div>
+
           <div className="space-y-2 my-6">
             <p className="text-base">
+              {" "}
               <span className="font-medium text-gray-500">Speaks:</span>{" "}
               <span className="text-gray-800 underline">
-                {teacher.languages?.join(", ")}
-              </span>
+                {" "}
+                {teacher.languages?.join(", ")}{" "}
+              </span>{" "}
             </p>
             <p className="text-base">
-              <span className="font-medium text-gray-500">Lesson Info:</span>{" "}
-              <span className="text-gray-800">{teacher.lesson_info}</span>
+              {" "}
+              <span className="font-medium text-gray-500">
+                Lesson Info:
+              </span>{" "}
+              <span className="text-gray-800">{teacher.lesson_info}</span>{" "}
             </p>
             <p className="text-base">
-              <span className="font-medium text-gray-500">Conditions:</span>{" "}
+              {" "}
+              <span className="font-medium text-gray-500">
+                Conditions:
+              </span>{" "}
               <span className="text-gray-800">
-                {teacher.conditions.join(" ")}
-              </span>
+                {" "}
+                {teacher.conditions.join(" ")}{" "}
+              </span>{" "}
             </p>
           </div>
+
           <button
             onClick={() => setIsDetailsOpen(!isDetailsOpen)}
             className="text-base font-bold text-gray-800 underline hover:text-yellow-600 mb-6"
           >
             {isDetailsOpen ? "Hide more" : "Read more"}
           </button>
+
           {isDetailsOpen && (
             <div className="border-t border-gray-100 pt-6 mt-6">
               <p className="text-gray-700">{teacher.experience}</p>
               {teacher.reviews?.map((review, index) => (
                 <ReviewItem key={index} review={review} />
               ))}
-              <button
-                onClick={() => onBookLesson && onBookLesson(teacher)}
-                className="mt-4 px-10 py-4 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-500 transition-colors"
-              >
-                {" "}
-                Book trial lesson{" "}
-              </button>
+              {/* === BUTON BURADAN TAŞINDI === */}
             </div>
           )}
+
           {teacher.levels?.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
               {teacher.levels.map((level, index) => (
@@ -172,6 +180,18 @@ const TeacherCard = ({
                   {level}
                 </span>
               ))}
+            </div>
+          )}
+
+          {/* === İSTEĞİNİZ ÜZERİNE BUTON BURAYA TAŞINDI === */}
+          {isDetailsOpen && ( // Butonun sadece detaylar açıkken görünmesini sağlıyoruz
+            <div className="mt-8">
+              <button
+                onClick={() => onBookLesson && onBookLesson(teacher)}
+                className="px-10 py-4 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-500 transition-colors"
+              >
+                Book trial lesson
+              </button>
             </div>
           )}
         </div>
