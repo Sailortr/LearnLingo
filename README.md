@@ -6,7 +6,7 @@ LearnLingo is a modern web application designed to connect students with the bes
 
 **Live Demo:** [https://learn-lingo-hazel-sigma.vercel.app/](https://learn-lingo-hazel-sigma.vercel.app/)
 
-![LearnLingo Home Page](https://i.imgur.com/uR1k3oM.png)
+![LearnLingo Home Page](./public/home.jpg)
 
 ---
 
