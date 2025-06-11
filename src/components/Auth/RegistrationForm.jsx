@@ -40,7 +40,6 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit(handleRegister)} className="space-y-5">
-      {/* Name */}
       <div>
         <input
           type="text"

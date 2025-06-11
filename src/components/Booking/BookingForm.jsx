@@ -12,17 +12,17 @@ const bookingReasons = [
 ];
 
 const bookingSchema = yup.object().shape({
-  reason: yup.string().required("Lütfen bir öğrenme nedeni seçin."),
-  fullName: yup.string().required("Tam ad alanı zorunludur."),
+  reason: yup.string().required("Please select a reason for learning."),
+  fullName: yup.string().required("Full name is required."),
   email: yup
     .string()
-    .email("Geçerli bir e-posta adresi girin.")
-    .required("E-posta alanı zorunludur."),
+    .email("Please enter a valid email address.")
+    .required("Email is required."),
   phone: yup
     .string()
-    .matches(/^[0-9]+$/, "Sadece rakam girilmelidir.")
-    .min(10, "Telefon numarası en az 10 haneli olmalıdır.")
-    .required("Telefon numarası zorunludur."),
+    .matches(/^[0-9]+$/, "Only numbers are allowed.")
+    .min(10, "The phone number must be at least 10 digits.")
+    .required("Phone number is required."),
 });
 
 const BookingForm = ({ onSubmitSuccess }) => {
@@ -36,7 +36,7 @@ const BookingForm = ({ onSubmitSuccess }) => {
 
   const handleBookingSubmit = (data) => {
     console.log("Booking Data:", data);
-    if (onSubmitSuccess) onSubmitSuccess(data); 
+    if (onSubmitSuccess) onSubmitSuccess(data);
   };
 
   return (

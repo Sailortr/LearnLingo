@@ -40,7 +40,6 @@ const LoginForm = ({ onSubmitSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
-      {/* Email */}
       <div>
         <input
           type="email"

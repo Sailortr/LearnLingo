@@ -2,7 +2,6 @@ import React, { useEffect, useCallback, useState } from "react";
 import BookingForm from "./BookingForm";
 
 const BookingModal = ({ isOpen, onClose, teacher, onBookingSubmitSuccess }) => {
-  // teacher: { avatar_url, name, surname }
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const handleEscKey = useCallback(

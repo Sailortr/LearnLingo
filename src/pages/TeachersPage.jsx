@@ -9,7 +9,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoritesContext";
 import InfoModal from "../components/UI/InfoModal";
 
-const TEACHERS_PER_PAGE = 4;
+const TEACHERS_PER_PAGE = 4;  
 
 const TeachersPage = () => {
   const [allTeachers] = useState(teachersData);

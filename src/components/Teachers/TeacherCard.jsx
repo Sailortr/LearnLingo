@@ -62,7 +62,6 @@ const TeacherCard = ({
 
   return (
     <div className="bg-white rounded-3xl border border-gray-200/80 p-6 mb-8 transition-shadow duration-300 hover:shadow-lg">
-      {/* --- KÜÇÜK YERLEŞİM DÜZELTMESİ: md:flex-row olmalı --- */}
       <div className="flex flex-row md:flex-col gap-8">
         <div className="flex-shrink-0 flex justify-center md:justify-start">
           <div className="relative w-28 h-28">
@@ -161,7 +160,6 @@ const TeacherCard = ({
               {teacher.reviews?.map((review, index) => (
                 <ReviewItem key={index} review={review} />
               ))}
-              {/* === BUTON BURADAN TAŞINDI === */}
             </div>
           )}
 
@@ -182,9 +180,7 @@ const TeacherCard = ({
               ))}
             </div>
           )}
-
-          {/* === İSTEĞİNİZ ÜZERİNE BUTON BURAYA TAŞINDI === */}
-          {isDetailsOpen && ( // Butonun sadece detaylar açıkken görünmesini sağlıyoruz
+          {isDetailsOpen && ( 
             <div className="mt-8">
               <button
                 onClick={() => onBookLesson && onBookLesson(teacher)}

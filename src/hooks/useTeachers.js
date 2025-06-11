@@ -1,8 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 
-// Varsayımsal öğretmen servisi fonksiyonları
-// Bu fonksiyonlar normalde src/services/teacherService.js gibi bir dosyada olurdu
-// ve Firebase/API çağrılarını yapardı.
 const fetchTeachersFromService = async ({ filters, page, perPage }) => {
   console.log(
     "Fetching teachers with filters:",
@@ -12,43 +9,21 @@ const fetchTeachersFromService = async ({ filters, page, perPage }) => {
     "PerPage:",
     perPage
   );
-  // --- Placeholder Logic ---
-  // Burada gerçek API çağrısı yapılmalı.
-  // Örnek veri döndürelim:
+
   return new Promise((resolve) => {
     setTimeout(() => {
-      // `initialTeachersData` TeachersPage.jsx'deki gibi bir veri olabilir.
-      // Bu veriyi filtreleyip sayfalayarak döndürdüğünüzü varsayalım.
-      const sampleTeachers = [
-        // ... öğretmen objeleri ...
-      ];
-      const totalTeachers = 20; // Toplam öğretmen sayısı (filtrelenmiş)
+      const sampleTeachers = [];
+      const totalTeachers = 20;
       const hasMoreData = page * perPage < totalTeachers;
       resolve({
-        data: sampleTeachers.slice(0, perPage), // Sadece o sayfadaki veriler
+        data: sampleTeachers.slice(0, perPage),
         hasMore: hasMoreData,
         total: totalTeachers,
       });
     }, 1000);
   });
-  // --- End Placeholder Logic ---
 };
 
-/**
- * Öğretmen verilerini yönetmek, filtrelemek ve sayfalamak için bir custom hook.
- * * @param {object} [initialFilters={}] - Başlangıç filtreleri.
- * @param {number} [teachersPerPage=4] - Sayfa başına gösterilecek öğretmen sayısı.
- * @returns {object}
- * - teachers: Yüklenen öğretmenlerin listesi (dizi).
- * - isLoading: Veri yüklenirken true olan boolean.
- * - error: Veri yükleme sırasında bir hata oluşursa hata mesajı (string).
- * - hasMore: Daha fazla öğretmen olup olmadığını belirten boolean.
- * - currentPage: Mevcut sayfa numarası.
- * - loadTeachers: Belirli filtreler ve sayfa ile öğretmenleri yükleyen fonksiyon.
- * - loadMoreTeachers: Bir sonraki sayfayı yükleyen fonksiyon.
- * - activeFilters: Şu anki aktif filtreler.
- * - setExternalFilters: Filtreleri dışarıdan ayarlamak için fonksiyon.
- */
 export const useTeachers = (initialFilters = {}, teachersPerPage = 4) => {
   const [teachers, setTeachers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -69,16 +44,16 @@ export const useTeachers = (initialFilters = {}, teachersPerPage = 4) => {
         });
 
         if (pageToLoad === 1) {
-          setTeachers(result.data); // Yeni filtrelerle ilk sayfa yükleniyorsa listeyi değiştir
+          setTeachers(result.data);
         } else {
-          setTeachers((prevTeachers) => [...prevTeachers, ...result.data]); // Daha fazla yükleniyorsa ekle
+          setTeachers((prevTeachers) => [...prevTeachers, ...result.data]);
         }
         setHasMore(result.hasMore);
         setCurrentPage(pageToLoad);
       } catch (err) {
         console.error("Failed to fetch teachers:", err);
         setError(err.message || "Öğretmenler yüklenirken bir hata oluştu.");
-        setTeachers([]); // Hata durumunda listeyi boşalt
+        setTeachers([]);
         setHasMore(false);
       } finally {
         setIsLoading(false);
@@ -87,11 +62,10 @@ export const useTeachers = (initialFilters = {}, teachersPerPage = 4) => {
     [teachersPerPage]
   );
 
-  // Filtreler değiştiğinde öğretmenleri yeniden yükle (ilk sayfadan başla)
   useEffect(() => {
-    setCurrentPage(1); // Sayfayı başa al
+    setCurrentPage(1);
     loadTeachers(1, activeFilters);
-  }, [activeFilters, loadTeachers]); // loadTeachers'ı bağımlılıklara ekledik
+  }, [activeFilters, loadTeachers]);
 
   const loadMoreTeachers = () => {
     if (hasMore && !isLoading) {
@@ -109,35 +83,9 @@ export const useTeachers = (initialFilters = {}, teachersPerPage = 4) => {
     error,
     hasMore,
     currentPage,
-    loadTeachers, // Belirli bir sayfayı belirli filtrelerle yüklemek için
+    loadTeachers,
     loadMoreTeachers,
     activeFilters,
-    setExternalFilters, // Filtreleri dışarıdan değiştirmek için
+    setExternalFilters,
   };
 };
-
-// Kullanım Örneği (TeachersPage.jsx içinde):
-// const {
-//   teachers,
-//   isLoading,
-//   error,
-//   hasMore,
-//   loadMoreTeachers,
-//   setExternalFilters,
-//   activeFilters
-// } = useTeachers({ language: 'english' }, 4);
-
-// useEffect(() => {
-//   // Dışarıdan gelen bir filtre değişikliği için
-//   // setExternalFilters({ level: 'A1' });
-// }, []);
-
-// return (
-//   <div>
-//     {/* FilterGroup bileşeni burada activeFilters ve setExternalFilters'ı kullanabilir */}
-//     {isLoading && <p>Loading...</p>}
-//     {error && <p>Error: {error}</p>}
-//     <TeacherList teachers={teachers} />
-//     {hasMore && <button onClick={loadMoreTeachers} disabled={isLoading}>Load More</button>}
-//   </div>
-// );
