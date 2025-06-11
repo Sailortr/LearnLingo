@@ -113,3 +113,5 @@ To get a local copy up and running, follow these simple steps.
 Sailortr - [GitHub Profile](https://github.com/Sailortr)
 
 Project Link: [https://github.com/Sailortr/LearnLingo.git](https://github.com/Sailortr/LearnLingo.git)
+
+Developer : Muhammet Uzunoglu
