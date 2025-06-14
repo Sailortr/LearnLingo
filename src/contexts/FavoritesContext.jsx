@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useAuth } from "./AuthContext";
-import { db } from "../../firebase/firebaseConfig";
+import { db } from "../firebase/firebaseConfig";
 import {
   doc,
   getDoc,

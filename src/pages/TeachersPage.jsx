@@ -9,16 +9,18 @@ import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoritesContext";
 import InfoModal from "../components/UI/InfoModal";
 
-const TEACHERS_PER_PAGE = 4;  
+const TEACHERS_PER_PAGE = 4;
+
+const initialFilters = {
+  language: "",
+  level: "",
+  price_per_hour: "",
+};
 
 const TeachersPage = () => {
   const [allTeachers] = useState(teachersData);
   const [displayedTeachers, setDisplayedTeachers] = useState([]);
-  const [filters, setFilters] = useState({
-    language: "",
-    level: "",
-    price_per_hour: "",
-  });
+  const [filters, setFilters] = useState(initialFilters);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -102,15 +104,27 @@ const TeachersPage = () => {
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleClearFilters = () => {
+    setFilters(initialFilters);
+    setCurrentPage(1);
+    loadTeachers(1, initialFilters);
+  };
+
   const availableFilters = {
     languages: [...new Set(allTeachers.flatMap((t) => t.languages))].map(
-      (l) => ({ value: l.toLowerCase(), label: l })
+      (l) => ({
+        value: l.toLowerCase(),
+        label: l,
+      })
     ),
     levels: [...new Set(allTeachers.flatMap((t) => t.levels))].map((lvl) => ({
       value: lvl,
       label: lvl,
     })),
-    prices: [10, 20, 30, 40].map((p) => ({ value: String(p), label: `$${p}` })),
+    prices: [10, 20, 30, 40].map((p) => ({
+      value: String(p),
+      label: `$${p}`,
+    })),
   };
 
   return (
@@ -119,6 +133,7 @@ const TeachersPage = () => {
         availableFilters={availableFilters}
         currentFilters={filters}
         onFilterChange={handleFilterChange}
+        onClearFilters={handleClearFilters}
       />
 
       {isLoading && displayedTeachers.length === 0 ? (

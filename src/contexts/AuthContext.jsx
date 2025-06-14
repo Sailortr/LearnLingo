@@ -6,7 +6,8 @@ import {
   signOut as firebaseSignOut,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "../../firebase/firebaseConfig";
+import { auth } from "../firebase/firebaseConfig";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext();
 
@@ -38,43 +39,38 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const register = async (email, password, name) => {
-    setLoading(true);
-    setAuthError(null);
+    // ...
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await updateProfile(userCredential.user, { displayName: name });
-
-      setCurrentUser(auth.currentUser);
-      setLoading(false);
-      return userCredential.user;
+      // ...
     } catch (error) {
-      console.error("Registration error:", error);
-      setAuthError(error.message);
-      setLoading(false);
-      throw error;
+      const message = getFriendlyErrorMessage(error.code);
+      toast.error(message); // alert yerine toast.error kullan
+      // ...
     }
   };
 
   const login = async (email, password) => {
-    setLoading(true);
-    setAuthError(null);
+    // ...
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      setLoading(false);
-      return userCredential.user;
+      // ...
     } catch (error) {
-      console.error("Login error:", error);
-      setAuthError(error.message);
-      setLoading(false);
-      throw error;
+      const message = getFriendlyErrorMessage(error.code);
+      toast.error(message); // alert yerine toast.error kullan
+      // ...
+    }
+  };
+
+  const getFriendlyErrorMessage = (errorCode) => {
+    switch (errorCode) {
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/user-not-found":
+      case "auth/wrong-password":
+        return "Invalid email or password. Please try again.";
+      case "auth/email-already-in-use":
+        return "This email address is already registered.";
+      default:
+        return "An unexpected error occurred. Please try again.";
     }
   };
 

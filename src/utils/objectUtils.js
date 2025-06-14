@@ -1,11 +1,6 @@
-/**
- * Bir nesnenin boş olup olmadığını kontrol eder (hiçbir enumerable property'si yoksa).
- * @param {object} obj - Kontrol edilecek nesne.
- * @returns {boolean} Nesne boşsa true, değilse false.
- */
 export const isEmptyObject = (obj) => {
   if (obj === null || obj === undefined || typeof obj !== "object") {
-    return true; // null, undefined veya nesne olmayanları boş kabul et
+    return true;
   }
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -15,24 +10,14 @@ export const isEmptyObject = (obj) => {
   return true;
 };
 
-/**
- * Bir nesnenin derin kopyasını oluşturur.
- * Modern tarayıcılar için `structuredClone` tercih edilebilir.
- * Bu fonksiyon basit JSON-uyumlu nesneler için çalışır. Fonksiyonlar, Date, RegExp, Map, Set gibi
- * özel tipler için doğru çalışmayabilir.
- * @param {object} obj - Kopyalanacak nesne.
- * @returns {object} Nesnenin derin kopyası.
- */
 export const deepClone = (obj) => {
   if (typeof structuredClone === "function") {
     try {
       return structuredClone(obj);
     } catch (e) {
-      // structuredClone bazı tiplerle hata verebilir, bu durumda fallback kullan
-      // console.warn("structuredClone failed, falling back to JSON clone:", e);
+      // Fallback
     }
   }
-  // Basit fallback: Sadece JSON-uyumlu veriler için çalışır.
   if (obj === null || typeof obj !== "object") {
     return obj;
   }
@@ -40,20 +25,10 @@ export const deepClone = (obj) => {
     return JSON.parse(JSON.stringify(obj));
   } catch (error) {
     console.error("deepClone (JSON fallback) error:", error);
-    // Daha karmaşık bir deep clone implementasyonu gerekebilir
-    // veya kütüphane (lodash.cloneDeep gibi) kullanılabilir.
-    // Şimdilik hata durumunda orijinali döndür veya hata fırlat.
-    return obj; // Ya da throw new Error("Deep clone failed for non-JSON serializable object");
+    return obj;
   }
 };
 
-/**
- * Bir nesneden, nokta (.) ile ayrılmış bir string path kullanarak iç içe geçmiş bir değere güvenli bir şekilde erişir.
- * @param {object} obj - Erişilecek nesne.
- * @param {string} path - Değere giden yol (örn: 'user.address.city').
- * @param {*} [defaultValue=undefined] - Yol bulunamazsa veya geçersizse döndürülecek varsayılan değer.
- * @returns {*} Bulunan değer veya varsayılan değer.
- */
 export const getNestedValue = (obj, path, defaultValue = undefined) => {
   if (!obj || typeof path !== "string") {
     return defaultValue;
@@ -73,11 +48,6 @@ export const getNestedValue = (obj, path, defaultValue = undefined) => {
   return result === undefined ? defaultValue : result;
 };
 
-/**
- * Bir nesneden null veya undefined değerlere sahip property'leri kaldırarak yeni bir nesne oluşturur.
- * @param {object} obj - Temizlenecek nesne.
- * @returns {object} Null veya undefined değerleri olmayan yeni bir nesne.
- */
 export const removeNullOrUndefinedValues = (obj) => {
   if (obj === null || typeof obj !== "object") {
     return obj;
@@ -95,12 +65,6 @@ export const removeNullOrUndefinedValues = (obj) => {
   return newObj;
 };
 
-/**
- * İki nesnenin sığ (shallow) olarak eşit olup olmadığını kontrol eder.
- * @param {object} objA
- * @param {object} objB
- * @returns {boolean}
- */
 export const shallowEqual = (objA, objB) => {
   if (objA === objB) {
     return true;

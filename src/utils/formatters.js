@@ -1,11 +1,3 @@
-/**
- * Verilen bir tarih değerini (Date objesi, timestamp veya string)
- * yerel ayara göre okunabilir bir tarih ve saat formatına dönüştürür.
- * @param {Date|number|string} dateInput - Formatlanacak tarih.
- * @param {object} [options] - Intl.DateTimeFormat seçenekleri.
- * @param {string} [locale='tr-TR'] - Kullanılacak yerel ayar.
- * @returns {string} Formatlanmış tarih ve saat veya geçersiz giriş için boş string.
- */
 export const formatDateTime = (dateInput, options, locale = "tr-TR") => {
   try {
     const date = new Date(dateInput);
@@ -23,17 +15,10 @@ export const formatDateTime = (dateInput, options, locale = "tr-TR") => {
     return new Intl.DateTimeFormat(locale, defaultOptions).format(date);
   } catch (error) {
     console.error("formatDateTime error:", error);
-    return String(dateInput); // Hata durumunda orijinal değeri döndür
+    return String(dateInput);
   }
 };
 
-/**
- * Verilen bir tarih değerini sadece tarih olarak formatlar.
- * @param {Date|number|string} dateInput - Formatlanacak tarih.
- * @param {object} [options] - Intl.DateTimeFormat seçenekleri.
- * @param {string} [locale='tr-TR'] - Kullanılacak yerel ayar.
- * @returns {string} Formatlanmış tarih.
- */
 export const formatDate = (dateInput, options, locale = "tr-TR") => {
   return formatDateTime(
     dateInput,
@@ -47,14 +32,6 @@ export const formatDate = (dateInput, options, locale = "tr-TR") => {
   );
 };
 
-/**
- * Bir sayı değerini para birimi formatına dönüştürür.
- * @param {number} amount - Formatlanacak sayı.
- * @param {string} [currency='TRY'] - Para birimi kodu (örn: 'USD', 'EUR').
- * @param {string} [locale='tr-TR'] - Kullanılacak yerel ayar.
- * @param {object} [options] - Intl.NumberFormat seçenekleri.
- * @returns {string} Formatlanmış para birimi.
- */
 export const formatCurrency = (
   amount,
   currency = "TRY",
@@ -80,11 +57,6 @@ export const formatCurrency = (
   }
 };
 
-/**
- * Bir string'in ilk harfini büyük yapar.
- * @param {string} str - İşlenecek string.
- * @returns {string} İlk harfi büyük yapılmış string veya boş string.
- */
 export const capitalizeFirstLetter = (str) => {
   if (!str || typeof str !== "string") {
     return "";
@@ -92,12 +64,6 @@ export const capitalizeFirstLetter = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-/**
- * Verilen metni belirtilen maksimum uzunluğa kısaltır ve sonuna '...' ekler.
- * @param {string} text - Kısaltılacak metin.
- * @param {number} maxLength - Metnin maksimum uzunluğu.
- * @returns {string} Kısaltılmış metin.
- */
 export const truncateText = (text, maxLength) => {
   if (!text || typeof text !== "string") {
     return "";

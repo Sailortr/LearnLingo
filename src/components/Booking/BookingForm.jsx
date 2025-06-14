@@ -35,7 +35,6 @@ const BookingForm = ({ onSubmitSuccess }) => {
   });
 
   const handleBookingSubmit = (data) => {
-    console.log("Booking Data:", data);
     if (onSubmitSuccess) onSubmitSuccess(data);
   };
 
