@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../firebase/firebaseConfig";
 
+// 1. Gerekli context ve yardımcı fonksiyonları import et
+import { useAuth } from "../../contexts/AuthContext";
+import { getFriendlyErrorMessage } from "../../utils/firebaseErrors";
+
+// 2. Doğrulama şemasını 'confirmPassword' içerecek şekilde güncelle
 const registrationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   email: yup
@@ -17,40 +20,52 @@ const registrationSchema = yup.object().shape({
     .required("Password is required"),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password")], "Passwords must match")
+    .oneOf([yup.ref("password")], "Passwords must match") // Şifrelerin eşleştiğini kontrol et
     .required("Please confirm your password"),
 });
 
 const RegistrationForm = ({ onSubmitSuccess }) => {
-  const [showPassword, setShowPassword] = useState(false);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(registrationSchema) });
+  } = useForm({
+    resolver: yupResolver(registrationSchema),
+  });
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
+  // 3. Yeni state'leri ekle
+  const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState(""); // Firebase'den gelen hataları tutmak için
 
+  // 4. AuthContext'ten register fonksiyonunu al
+  const { register: registerUser } = useAuth();
+
+  // 5. handleRegister fonksiyonunu güncelle
   const handleRegister = async (data) => {
+    setApiError(""); // Her yeni denemede önceki hatayı temizle
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-      await updateProfile(userCredential.user, { displayName: data.name });
-      if (onSubmitSuccess) onSubmitSuccess(userCredential.user);
+      // Context'teki register fonksiyonunu çağır
+      await registerUser(data.email, data.password, data.name);
+
+      // Başarılı olursa, üst bileşene haber ver (modalı kapatmak için)
+      if (onSubmitSuccess) onSubmitSuccess();
     } catch (error) {
-      alert("Registration failed: " + error.message);
+      // Hata yakalanırsa, anlamlı mesaja çevir ve state'e ata
+      const friendlyMessage = getFriendlyErrorMessage(error.code);
+      setApiError(friendlyMessage);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(handleRegister)} className="space-y-5">
-      {/* Name */}
+    <form onSubmit={handleSubmit(handleRegister)} className="space-y-4">
+      {/* 6. Hata mesajını formun üstünde göster */}
+      {apiError && (
+        <div className="p-3 mb-2 bg-red-100 border border-red-300 rounded-lg text-center">
+          <p className="text-sm font-medium text-red-700">{apiError}</p>
+        </div>
+      )}
+
+      {/* Name Input */}
       <div>
         <input
           type="text"
@@ -65,7 +80,7 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
         )}
       </div>
 
-      {/* Email */}
+      {/* Email Input */}
       <div>
         <input
           type="email"
@@ -80,7 +95,7 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
         )}
       </div>
 
-      {/* Password with toggle */}
+      {/* Password Input (with toggle) */}
       <div className="relative">
         <input
           type={showPassword ? "text" : "password"}
@@ -91,17 +106,17 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
           }`}
         />
         <span
-          onClick={togglePasswordVisibility}
-          className="absolute inset-y-0 right-3 flex items-center cursor-pointer select-none"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer select-none"
+          onClick={() => setShowPassword((prev) => !prev)}
         >
-          {showPassword ? "🙈" : "👁"}
+          {showPassword ? "🙈" : "👁️"}
         </span>
-        {errors.password && (
-          <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
-        )}
       </div>
+      {errors.password && (
+        <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+      )}
 
-      {/* Confirm Password (her zaman gizli) */}
+      {/* Confirm Password Input */}
       <div>
         <input
           type="password"
@@ -120,7 +135,7 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
 
       <button
         type="submit"
-        className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-white text-base font-semibold rounded-xl transition-colors duration-200"
+        className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-black text-sm font-semibold rounded-xl transition-colors duration-200"
       >
         Sign Up
       </button>

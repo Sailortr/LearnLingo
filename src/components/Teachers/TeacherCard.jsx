@@ -82,33 +82,24 @@ const TeacherCard = ({
         </div>
 
         <div className="flex-1">
-          <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
-            <div>
-              <p className="text-sm font-medium text-gray-500">Languages</p>
-              <h2 className="text-2xl font-bold text-gray-800 mt-2">
-                {fullName}
-              </h2>
-            </div>
+          {/* === YAPI DEĞİŞİKLİĞİ BURADA === */}
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-sm font-medium text-gray-500">Languages</p>
             <div className="flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2 text-base text-gray-800 font-medium">
               <div className="flex items-center gap-2">
-                {" "}
-                <BookOpenIcon /> <span>Lessons online</span>{" "}
+                <BookOpenIcon /> <span>Lessons online</span>
               </div>
               <div className="hidden sm:block">
-                {" "}
-                Lessons done: {teacher.lessons_done}{" "}
+                Lessons done: {teacher.lessons_done}
               </div>
               <div className="flex items-center gap-2">
-                {" "}
-                <StarIconSolid /> <span>Rating: {teacher.rating}</span>{" "}
+                <StarIconSolid /> <span>Rating: {teacher.rating}</span>
               </div>
               <p>
-                {" "}
-                Price / 1 hour:{" "}
+                Price / 1 hour:
                 <span className="text-green-600 font-semibold ml-1">
-                  {" "}
-                  {teacher.price_per_hour}${" "}
-                </span>{" "}
+                  {teacher.price_per_hour}$
+                </span>
               </p>
               <button
                 onClick={() => onToggleFavorite && onToggleFavorite(teacher.id)}
@@ -119,31 +110,26 @@ const TeacherCard = ({
             </div>
           </div>
 
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">{fullName}</h2>
+
+          {/* === KODUN GERİ KALANI AYNI === */}
           <div className="space-y-2 my-6">
             <p className="text-base">
-              {" "}
-              <span className="font-medium text-gray-500">Speaks:</span>{" "}
+              <span className="font-medium text-gray-500">Speaks:</span>
               <span className="text-gray-800 underline">
                 {" "}
                 {teacher.languages?.join(", ")}{" "}
-              </span>{" "}
+              </span>
             </p>
             <p className="text-base">
-              {" "}
-              <span className="font-medium text-gray-500">
-                Lesson Info:
-              </span>{" "}
-              <span className="text-gray-800">{teacher.lesson_info}</span>{" "}
+              <span className="font-medium text-gray-500">Lesson Info:</span>
+              <span className="text-gray-800">{teacher.lesson_info}</span>
             </p>
             <p className="text-base">
-              {" "}
-              <span className="font-medium text-gray-500">
-                Conditions:
-              </span>{" "}
+              <span className="font-medium text-gray-500">Conditions:</span>
               <span className="text-gray-800">
-                {" "}
-                {teacher.conditions.join(" ")}{" "}
-              </span>{" "}
+                {teacher.conditions.join(" ")}
+              </span>
             </p>
           </div>
 
@@ -180,7 +166,8 @@ const TeacherCard = ({
               ))}
             </div>
           )}
-          {isDetailsOpen && ( 
+
+          {isDetailsOpen && (
             <div className="mt-8">
               <button
                 onClick={() => onBookLesson && onBookLesson(teacher)}

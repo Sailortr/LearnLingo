@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase/firebaseConfig";
 
+// 1. ADIM: Gerekli context ve yardımcı fonksiyonları import et
+import { useAuth } from "../../contexts/AuthContext";
+import { getFriendlyErrorMessage } from "../../utils/firebaseErrors";
+
+// Doğrulama şeması (Yup Schema)
 const loginSchema = yup.object().shape({
   email: yup
     .string()
@@ -21,25 +24,43 @@ const LoginForm = ({ onSubmitSuccess }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(loginSchema) });
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
 
+  // 2. ADIM: Yeni state'leri ekle
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState(""); // Firebase'den gelen hataları tutmak için
 
+  // 3. ADIM: AuthContext'ten login fonksiyonunu al
+  const { login } = useAuth();
+
+  // 4. ADIM: handleLogin fonksiyonunu güncelle
   const handleLogin = async (data) => {
+    setApiError(""); // Her yeni denemede önceki hatayı temizle
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-      if (onSubmitSuccess) onSubmitSuccess(userCredential.user);
+      // Artık doğrudan Firebase'i değil, context'teki login fonksiyonunu çağırıyoruz.
+      // Bu, mimarimizi tutarlı hale getirir.
+      await login(data.email, data.password);
+
+      // Başarılı olursa, üst bileşene haber ver (modalı kapatmak için)
+      if (onSubmitSuccess) onSubmitSuccess();
     } catch (error) {
-      alert("Login failed: " + error.message);
+      // Hata yakalanırsa, anlamlı mesaja çevir ve state'e ata
+      const friendlyMessage = getFriendlyErrorMessage(error.code);
+      setApiError(friendlyMessage);
     }
   };
 
   return (
     <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
+      {/* 5. ADIM: Hata mesajını formun üstünde göster */}
+      {apiError && (
+        <div className="p-3 bg-red-100 border border-red-300 rounded-lg text-center">
+          <p className="text-sm font-medium text-red-700">{apiError}</p>
+        </div>
+      )}
+
       <div>
         <input
           type="email"
@@ -67,7 +88,7 @@ const LoginForm = ({ onSubmitSuccess }) => {
           className="absolute right-4 top-3.5 text-gray-500 cursor-pointer"
           onClick={() => setShowPassword((prev) => !prev)}
         >
-          {showPassword ? "👁" : "🙈"}
+          {showPassword ? "👁️" : "🙈"}
         </span>
         {errors.password && (
           <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
