@@ -46,7 +46,6 @@ const AuthModal = ({
         className="bg-white rounded-2xl p-8 sm:p-10 w-full max-w-[480px] m-4 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
         <div className="flex justify-between items-start mb-6">
           <div>
             <h2 className="text-[32px] font-bold text-[#121417] leading-[40px]">

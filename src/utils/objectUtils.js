@@ -14,9 +14,7 @@ export const deepClone = (obj) => {
   if (typeof structuredClone === "function") {
     try {
       return structuredClone(obj);
-    } catch (e) {
-      // Fallback
-    }
+    } catch (e) {}
   }
   if (obj === null || typeof obj !== "object") {
     return obj;

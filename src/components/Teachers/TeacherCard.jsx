@@ -82,7 +82,6 @@ const TeacherCard = ({
         </div>
 
         <div className="flex-1">
-          {/* === YAPI DEĞİŞİKLİĞİ BURADA === */}
           <div className="flex justify-between items-center mb-2">
             <p className="text-sm font-medium text-gray-500">Languages</p>
             <div className="flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2 text-base text-gray-800 font-medium">
@@ -111,8 +110,6 @@ const TeacherCard = ({
           </div>
 
           <h2 className="text-2xl font-bold text-gray-800 mb-6">{fullName}</h2>
-
-          {/* === KODUN GERİ KALANI AYNI === */}
           <div className="space-y-2 my-6">
             <p className="text-base">
               <span className="font-medium text-gray-500">Speaks:</span>

@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
-// 1. ADIM: Gerekli context ve yardımcı fonksiyonları import et
 import { useAuth } from "../../contexts/AuthContext";
 import { getFriendlyErrorMessage } from "../../utils/firebaseErrors";
 
-// Doğrulama şeması (Yup Schema)
 const loginSchema = yup.object().shape({
   email: yup
     .string()
@@ -28,25 +25,16 @@ const LoginForm = ({ onSubmitSuccess }) => {
     resolver: yupResolver(loginSchema),
   });
 
-  // 2. ADIM: Yeni state'leri ekle
   const [showPassword, setShowPassword] = useState(false);
-  const [apiError, setApiError] = useState(""); // Firebase'den gelen hataları tutmak için
-
-  // 3. ADIM: AuthContext'ten login fonksiyonunu al
+  const [apiError, setApiError] = useState("");
   const { login } = useAuth();
 
-  // 4. ADIM: handleLogin fonksiyonunu güncelle
   const handleLogin = async (data) => {
-    setApiError(""); // Her yeni denemede önceki hatayı temizle
+    setApiError("");
     try {
-      // Artık doğrudan Firebase'i değil, context'teki login fonksiyonunu çağırıyoruz.
-      // Bu, mimarimizi tutarlı hale getirir.
       await login(data.email, data.password);
-
-      // Başarılı olursa, üst bileşene haber ver (modalı kapatmak için)
       if (onSubmitSuccess) onSubmitSuccess();
     } catch (error) {
-      // Hata yakalanırsa, anlamlı mesaja çevir ve state'e ata
       const friendlyMessage = getFriendlyErrorMessage(error.code);
       setApiError(friendlyMessage);
     }
@@ -54,7 +42,6 @@ const LoginForm = ({ onSubmitSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
-      {/* 5. ADIM: Hata mesajını formun üstünde göster */}
       {apiError && (
         <div className="p-3 bg-red-100 border border-red-300 rounded-lg text-center">
           <p className="text-sm font-medium text-red-700">{apiError}</p>
@@ -66,6 +53,7 @@ const LoginForm = ({ onSubmitSuccess }) => {
           type="email"
           placeholder="Email"
           {...register("email")}
+          autoComplete="username"
           className={`w-full px-4 py-3 rounded-lg border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
             errors.email ? "border-red-500" : "border-gray-300"
           }`}
@@ -80,6 +68,7 @@ const LoginForm = ({ onSubmitSuccess }) => {
           type={showPassword ? "text" : "password"}
           placeholder="Password"
           {...register("password")}
+          autoComplete="current-password"
           className={`w-full px-4 py-3 rounded-lg border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
             errors.password ? "border-red-500" : "border-gray-300"
           }`}

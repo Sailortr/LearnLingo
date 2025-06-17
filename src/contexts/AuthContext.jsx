@@ -9,24 +9,6 @@ import {
 import { auth, db } from "../firebase/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 
-// Bu yardımcı fonksiyonu context dışında tutmak daha iyi bir pratiktir.
-const getFriendlyErrorMessage = (errorCode) => {
-  switch (errorCode) {
-    case "auth/invalid-email":
-      return "Please enter a valid email address.";
-    case "auth/user-not-found":
-    case "auth/wrong-password":
-    case "auth/invalid-credential":
-      return "Incorrect email or password. Please try again.";
-    case "auth/email-already-in-use":
-      return "This email address is already registered.";
-    case "auth/weak-password":
-      return "The password must be at least 6 characters long.";
-    default:
-      return "An unexpected error occurred. Please try again later.";
-  }
-};
-
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -81,7 +63,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Registration error:", error);
       setAuthError(error.message);
-      // Hatayı, onu çağıran formun yakalayabilmesi için fırlat
       throw error;
     }
   };
@@ -98,8 +79,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Login error:", error);
       setAuthError(error.message);
-      // === İSTEDİĞİNİZ ANA DEĞİŞİKLİK BURADA ===
-      // Hatayı, onu çağıran LoginForm'un yakalayabilmesi için tekrar fırlatıyoruz.
       throw error;
     }
   };
