@@ -41,7 +41,7 @@ const FilterGroup = ({
           onClick={onClearFilters}
           className="text-sm font-medium text-red-600 hover:underline hover:text-red-800 transition-colors duration-200"
         >
-          Tüm Filtreleri Temizle
+          Clear All Filters
         </button>
       </div>
     </div>
